@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm";
+import Cart from "./Cart";
 
 @Entity("users")
 export default class User {
@@ -16,6 +17,9 @@ export default class User {
 
   @Column()
   isAdm: boolean;
+
+  @OneToOne(type => Cart) @JoinColumn()
+  cart: Cart
 
   @Column()
   createdOn: Date;
