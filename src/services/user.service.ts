@@ -1,22 +1,18 @@
 import { getCustomRepository } from "typeorm";
-import * as bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import jwtConfig from "../configs/jwt";
 import AppError from "../errors/AppError";
 import UserRepository from "../repositories/UserRepository";
 import { UserBodySignUp, DataUser } from "../types/IUser";
 
 export const createUser = async (data: UserBodySignUp) => {
-  const dataUser = data;
-
+ 
   const userRepository = getCustomRepository(UserRepository);
 
-  if ((await userRepository.emailAlreadyExists(dataUser.email)) === true) {
+  if ((await userRepository.emailAlreadyExists(data.email)) === true) {
     throw new Error("Email already registered");
   }
 
   try {
-    const user = userRepository.create(dataUser);
+    const user = userRepository.create(data);
 
     await userRepository.save(user);
 
