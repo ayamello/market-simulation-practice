@@ -15,6 +15,24 @@ class ProductCartRepository extends Repository<Product_Cart> {
         return cart;
     }
 
+    public async findProductFromCart(productId: string): Promise<Product_Cart | undefined> {
+        const product = await this.findOne({ where: { productId } });
+      
+        return product;
+    }
+
+    public async deleteProductCart(productId: string, quantity: number): Promise<string | undefined> {
+        const productCart = await this.findOne({ select: ["id"], where: { productId } });
+    
+        if(productCart){
+            this.remove(productCart);
+            return "Deleted product";
+        }
+        else {
+            return "Product not found!"
+        }
+    }
+
 }
 
 export default ProductCartRepository;

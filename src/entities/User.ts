@@ -18,7 +18,7 @@ export default class User {
   @Column()
   isAdm: boolean;
 
-  @OneToOne(type => Cart) @JoinColumn()
+  @OneToOne(type => Cart, { onDelete: 'CASCADE', eager: true }) @JoinColumn()
   cart: Cart
 
   @Column()

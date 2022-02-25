@@ -10,8 +10,7 @@ class CartRepository extends Repository<Cart> {
     }
     
     public async findCartById(id: string): Promise<Cart | undefined> {
-        const cart = await this.findOne({ id });
-      
+        const cart = await this.findOne({ id })
         return cart;
     }
 

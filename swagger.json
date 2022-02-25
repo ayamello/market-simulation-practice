@@ -1,0 +1,201 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "KenzieMarket API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://localhost:3000/",
+      "description": "Local Server"
+    },
+    {
+      "url": "url/heroku",
+      "description": "Production Server"
+    }
+  ],
+  "paths": {
+    "/user": {
+      "post": {
+        "description": "Cadastrar usuário",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "name": {
+                    "type":"string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "isAdm": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "name": "user",
+                    "email": "user@mail.com",
+                    "password": "123456",
+                    "isAdm": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Usuário criado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserWithoutPassword"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Falta de alguma propriedade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "ValidationError": {
+                      "type": "array"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+      "get": {}
+    },
+    "/login": {
+      "post": {
+        "description": "Login do usuário",
+        "requestBody": {
+          "content": {
+            "application/json": {
+
+            }
+          }
+        }
+      }
+    },
+    "/user/{id}": {
+      "get": {}
+    },
+    "/product": {
+      "post": {
+        "description": "Registrar produto",
+        "requestBody": {
+          "content": {
+            "application/json": {
+
+            }
+          }
+        }
+      },
+      "get": {}
+    },
+    "/product/{id}": {
+      "get": {}
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Gerado com UUID v4"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string",
+            "description": "Hashed com BCrypt"
+          },
+          "isAdm": {
+            "type": "boolean",
+            "description": "Define se o usuário tem nível administrador ou não"
+          },
+          "createdOn": {
+            "type": "string"
+          },
+          "updatedOn": {
+            "type": "string"
+          }
+        }
+      },
+      "UserWithoutPassword": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Gerado com UUID v4"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "isAdm": {
+            "type": "boolean",
+            "description": "Define se o usuário tem nível administrador ou não"
+          },
+          "createdOn": {
+            "type": "string",
+            "description": "Gerado com Date"
+          },
+          "updatedOn": {
+            "type": "string",
+            "description": "Gerado com Date"
+          }
+        }
+      },
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Gerado com UUID v4"
+          },
+          "name": {
+            "type": "string"
+          },
+          "unit_value": {
+            "type": "number"
+          },
+          "quantity": {
+            "type": "integer"
+          },
+          "createdOn": {
+            "type": "string",
+            "description": "Gerado com Date"
+          },
+          "updatedOn": {
+            "type": "string",
+            "description": "Gerado com Date"
+          }
+        }
+      }
+    }
+}
+

@@ -6,7 +6,7 @@ export default class Cart {
     @PrimaryGeneratedColumn("uuid")
     id: string;
 
-    @OneToMany(type => Product_Cart, product => product.cart, { onDelete: 'CASCADE' })
+    @OneToMany(type => Product_Cart, product => product.cart, { onDelete: 'CASCADE', eager: true })
     products: Product_Cart[]
 
     @Column()

@@ -1,6 +1,8 @@
+import { IProductCart } from "./IProductCart";
+
 export interface ICart {
     id: string
-    products: []
+    products: IProductCart[]
     createdOn: Date
     updatedOn: Date
 }

@@ -25,7 +25,7 @@ export const createUser = async (data: UserBodySignUp) => {
 export const listUsers = async () => {
   const userRepository = getCustomRepository(UserRepository);
 
-  const users = await userRepository.getUsers();
+  const users = await userRepository.getUsers();  
 
   return users;
 };

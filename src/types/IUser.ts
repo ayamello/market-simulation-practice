@@ -1,4 +1,4 @@
-import { Cart } from "./ICart";
+import { ICart } from "./ICart";
 
 export interface DataUser {
     id: string
@@ -6,7 +6,7 @@ export interface DataUser {
     email: string
     isAdm: boolean
     password_hash: string
-    cart: Cart
+    cart: ICart
     createdOn: Date
     updatedOn: Date
 }
