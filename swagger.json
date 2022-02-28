@@ -76,9 +76,22 @@
             }
           }
         }
+      },
+      "get": {
+        "description": "Retornar lista de usuários",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserWithoutPassword"
+                }
+              }
+            }
+          }
+        }
       }
-    },
-      "get": {}
     },
     "/login": {
       "post": {
@@ -86,14 +99,75 @@
         "requestBody": {
           "content": {
             "application/json": {
-
+              "schema": {
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "email": "user@mail.com",
+                    "password": "123456"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Usuário logado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Usuário não cadastrado ou email incorreto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "ValidationError": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
             }
           }
         }
       }
     },
     "/user/{id}": {
-      "get": {}
+      "get": {
+        "description": "Retornar o usuário correspondente ao id",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserWithoutPassword"
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "/product": {
       "post": {
@@ -101,15 +175,159 @@
         "requestBody": {
           "content": {
             "application/json": {
-
+              "schema": {
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Nome do produto"
+                  },
+                  "unit_value": {
+                    "type": "number",
+                    "description": "Valor da unidade"
+                  },
+                  "quantity": {
+                    "type": "number",
+                    "description": "Quantidade em estoque"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
             }
           }
         }
       },
-      "get": {}
+      "get": {
+        "description": "Retornar lista de produtos",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "products": {
+                      "type": "array"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "/product/{id}": {
-      "get": {}
+      "get": {
+        "description": "Retornar o produto correspondente ao id",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cart/{product_id}": {
+      "post": {
+        "description": "Adicionar produto ao carrinho",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "quantity": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserAfterAddProduct"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Deletar um produto do carrinho",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "quantity": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/cart/{id}": {
+      "get": {
+        "description": "Retornar o carrinho correspondente ao id",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cart"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cart": {
+      "get": {
+        "description": "Retornar lista de carrinhos",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -140,6 +358,9 @@
           },
           "updatedOn": {
             "type": "string"
+          },
+          "cart": {
+            "type": "array"
           }
         }
       },
@@ -167,6 +388,9 @@
           "updatedOn": {
             "type": "string",
             "description": "Gerado com Date"
+          },
+          "cart": {
+            "type": "array"
           }
         }
       },
@@ -195,7 +419,50 @@
             "description": "Gerado com Date"
           }
         }
+      },
+      "UserAfterAddProduct": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Id do usuário dono do carrinho"
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome do usuário dono do carrinho"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email do usuário dono do carrinho"
+          },
+          "cart": {
+            "type": "object",
+            "description": "Carrinho do usuário"
+          }
+        }
+      },
+      "Cart": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Id do carrinho"
+          },
+          "createdOn": {
+            "type": "string",
+            "description": "Gerado com Date"
+          },
+          "updatedOn": {
+            "type": "string",
+            "description": "Gerado com Date"
+          },
+          "products": {
+            "type": "array",
+            "description": "Lista de produtos do carrinho"
+          }
+        }        
       }
     }
+  }
 }
 

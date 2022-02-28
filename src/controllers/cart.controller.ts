@@ -39,13 +39,13 @@ export const list = async (req: Request, res: Response) => {
 };
 
 export const removeProduct = async (req: Request, res: Response) => {
-  const { productId } = req.params;
+  const { product_id } = req.params;
   const { quantity } = req.body;
 
   try {
-    await removeProductFromCart(productId, quantity);
+    await removeProductFromCart(product_id, quantity);
 
-    return res.status(200).json();
+    return res.status(204).json();
   } catch (error: any) {
     return res.status(400).json({ message: error.message });
   }

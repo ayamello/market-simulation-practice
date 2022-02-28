@@ -11,7 +11,7 @@ const cartRouter = () => {
   router.post('/:product_id', isAuth, validation(productToCartSchema), addProductToCart);
   router.get('/:id', isAuth, getCartById);
   router.get('', isAuth, isUserAdm, list);
-  router.delete('/:productId', isAuth, removeProduct);
+  router.delete('/:product_id', isAuth, removeProduct);
   
   return router;
 };
