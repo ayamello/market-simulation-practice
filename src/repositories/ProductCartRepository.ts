@@ -21,7 +21,7 @@ class ProductCartRepository extends Repository<Product_Cart> {
         return product;
     }
 
-    public async deleteProductCart(productId: string, quantity: number): Promise<string | undefined> {
+    public async deleteProductCart(productId: string): Promise<string | undefined> {
         const productCart = await this.findOne({ select: ["id"], where: { productId } });
     
         if(productCart){

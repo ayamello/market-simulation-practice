@@ -1,4 +1,4 @@
-import { create, list, getUserById } from './../controllers/user.controller';
+import { create, list, getUserById, passwordRecovery } from './../controllers/user.controller';
 import { Router } from "express";
 import validation from "../middlewares/validation";
 import userSchema from "../schemas/userSchema";
@@ -11,6 +11,7 @@ const userRouter = () => {
   router.post('', validation(userSchema), create);
   router.get('', isAuth, isUserAdm, list);
   router.get('/:id', isAuth, getUserById);
+  router.post('/password-recovery', passwordRecovery);
   return router;
 };
 

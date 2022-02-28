@@ -17,6 +17,7 @@ const userSchema = yup.object().shape({
   isAdm: yup.boolean().required("isAdm field is required"),
   createdOn: yup.date().default(() => new Date()),
   updatedOn: yup.date().default(() => new Date()),
+  token: yup.string().default(() => "")
 });
 
 export default userSchema;

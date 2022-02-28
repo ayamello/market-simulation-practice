@@ -174,8 +174,7 @@ export const removeProductFromCart = async (
         return product;
       } else {
         return await productCartRepository.deleteProductCart(
-          productId,
-          quantity
+          productId
         );
       }
     }

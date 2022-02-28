@@ -9,6 +9,7 @@ export interface DataUser {
     cart: ICart
     createdOn: Date
     updatedOn: Date
+    token: string | null | ""
 }
 
 export interface UserBodySignUp {

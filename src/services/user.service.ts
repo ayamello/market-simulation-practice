@@ -2,6 +2,7 @@ import { getCustomRepository } from "typeorm";
 import AppError from "../errors/AppError";
 import UserRepository from "../repositories/UserRepository";
 import { UserBodySignUp, DataUser } from "../types/IUser";
+import { v4 } from "uuid";
 
 export const createUser = async (data: UserBodySignUp) => {
   const userRepository = getCustomRepository(UserRepository);
@@ -44,3 +45,41 @@ export const getDataUser = async (id: string, user: DataUser) => {
     throw new AppError((error as any).message, 404);
   }
 };
+
+export const passwordRecoveryService = async (email: string) => {
+  const userRepository = getCustomRepository(UserRepository);
+
+  try {
+    const userFind = await userRepository.findUserByEmail(email);
+
+    if(userFind) {
+      userFind.token = v4();
+      await userRepository.save(userFind);
+    }
+
+    return userFind;
+  } catch (error) {
+    throw new AppError((error as any).message, 404);
+  } 
+}
+
+export const resetPasswordService = async (email: string, password: string, token: string) => {
+  const userRepository = getCustomRepository(UserRepository);
+
+  try {
+    const userFind = await userRepository.findUserByEmail(email);
+
+    if(userFind && userFind.token === token) {
+      userFind.password = password;
+      userFind.token = "";
+
+      await userRepository.save(userFind);
+
+      return {message: "Password changed!"};
+    }
+
+    return {message: "Invalid token"};
+  } catch (error) {
+    throw new AppError((error as any).message, 404);
+  } 
+}

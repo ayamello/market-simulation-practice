@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { createUser, listUsers, getDataUser } from "../services/user.service";
+import { createUser, listUsers, getDataUser, passwordRecoveryService, resetPasswordService } from "../services/user.service";
+import { transport, mailOptions } from './../services/email.service';
 
 export const create = async (req: Request, res: Response) => {
   const data = req.validatedData;
@@ -39,3 +40,42 @@ export const getUserById = async (req: Request, res: Response) => {
     return res.status(400).json({ message: error.message });
   }
 };
+
+export const passwordRecovery = async (req: Request, res: Response) => {
+  const { email } = req.body; 
+  
+  const user = await passwordRecoveryService(email);
+
+  const emailFrom = process.env.EMAIL_SYSTEM;
+
+  if(user && emailFrom) {
+    const options = mailOptions(
+      emailFrom, 
+      user?.email, 
+      "Password recovery",
+      `Your code is ${user?.token}`
+    );
+
+    transport.sendMail(options, function(err, info) {
+      if(err) {
+       return err;
+      }
+      else {
+        console.log(info)
+        return res.status(200).json({ "message": "Code sended!" });
+      }
+    });
+  }
+}
+
+export const resetPassword = async (req: Request, res: Response) => {
+  const { email, password, token } = req.body;
+
+  const status = await resetPasswordService(email, password, token);
+
+  if(status.message === "Password changed!") {
+    return res.status(200).json({ message: status.message });
+  } 
+
+  return res.status(403).json({ message: status.message });
+}

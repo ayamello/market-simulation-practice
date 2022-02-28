@@ -26,4 +26,7 @@ export default class User {
 
   @Column()
   updatedOn: Date;
+
+  @Column()
+  token: string | "";
 }

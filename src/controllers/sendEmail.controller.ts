@@ -13,7 +13,7 @@ export const sendEmail = async (req: Request, res: Response, next: NextFunction)
       }
       else {
         console.log(info)
-        return res.status(200).json({ "message": "Email enviado com sucesso!" });
+        return res.status(200).json({ "message": "Email sended!" });
       }
     });
   } catch (error: any) {
